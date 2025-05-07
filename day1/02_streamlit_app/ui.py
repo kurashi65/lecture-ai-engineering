@@ -100,7 +100,8 @@ def display_history_page():
         return
 
     # タブでセクションを分ける
-    tab1, tab2 = st.tabs(["履歴閲覧", "評価指標分析"])
+    tab1, tab2 = st.tabs(["📚 履歴閲覧", "📈 評価指標分析"])
+
 
     with tab1:
         display_history_list(history_df)

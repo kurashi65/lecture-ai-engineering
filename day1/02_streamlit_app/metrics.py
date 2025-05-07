@@ -92,8 +92,15 @@ def calculate_metrics(answer, correct_answer):
         except Exception as e:
             # st.warning(f"関連性スコア計算エラー: {e}")
             relevance_score = 0.0 # エラー時は0
-
-    return bleu_score, similarity_score, word_count, relevance_score
+        # 重複語数の計算
+        duplicate_token_count = 0
+        try:
+            words = re.findall(r'\w+', answer.lower())
+            unique_words = set(words)
+            duplicate_token_count = len(words) - len(unique_words)
+        except:
+            duplicate_token_count = 0
+    return bleu_score, similarity_score, word_count, relevance_score, duplicate_token_count
 
 def get_metrics_descriptions():
     """評価指標の説明を返す"""
@@ -104,5 +111,6 @@ def get_metrics_descriptions():
         "類似度スコア (similarity_score)": "TF-IDFベクトルのコサイン類似度による、正解と回答の意味的な類似性 (0〜1の値)",
         "単語数 (word_count)": "回答に含まれる単語の数。情報量や詳細さの指標",
         "関連性スコア (relevance_score)": "正解と回答の共通単語の割合。トピックの関連性を表す (0〜1の値)",
-        "効率性スコア (efficiency_score)": "正確性を応答時間で割った値。高速で正確な回答ほど高スコア"
+        "効率性スコア (efficiency_score)": "正確性を応答時間で割った値。高速で正確な回答ほど高スコア",
+        "重複語数 (duplicate_token_count)": "回答中の単語の繰り返し数。繰り返しが多すぎると品質低下の兆候"    
     }
